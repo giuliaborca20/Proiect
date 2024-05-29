@@ -1,0 +1,623 @@
+[
+    {
+        "id": "c3644a3b57e2390f",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "19620deb3fda3bd1",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Inserare",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "c59f9a54916ab759"
+            ]
+        ]
+    },
+    {
+        "id": "9f5694786a7b6c3d",
+        "type": "debug",
+        "z": "c3644a3b57e2390f",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "ddad3894d3d47007",
+        "type": "mysql",
+        "z": "c3644a3b57e2390f",
+        "mydb": "c2c8ed4c67d49107",
+        "name": "database",
+        "x": 480,
+        "y": 100,
+        "wires": [
+            [
+                "9f5694786a7b6c3d",
+                "3f0bb30b85c460d6"
+            ]
+        ]
+    },
+    {
+        "id": "c59f9a54916ab759",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 5",
+        "func": "var numar1 = Math.floor((Math.random() * 50) + 1);\nvar numar2 = Math.floor((Math.random() * 50) + 1);\nvar numar3 = Math.floor((Math.random() * 50) + 1);\nvar sql = \"INSERT INTO tabela(Senzor1, Senzor2, Senzor3) VALUES (\" + numar1 + \", \" + numar2 + \", \" + numar3 + \");\";\n\n// Setăm instrucțiunea SQL ca valoare pentru topic, deoarece nodul MySQL din Node-RED folosește topic-ul pentru a trimite instrucțiunile SQL\nmsg.topic = sql;\n\n// Returnăm mesajul modificat pentru a fi trimis la nodul MySQL\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 100,
+        "wires": [
+            [
+                "ddad3894d3d47007"
+            ]
+        ]
+    },
+    {
+        "id": "8772de696e45b746",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Afisare",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "SELECT * FROM database.tabela;",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 140,
+        "wires": [
+            [
+                "ddad3894d3d47007"
+            ]
+        ]
+    },
+    {
+        "id": "1a5b883787c14cc7",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 6",
+        "func": "var query = \"CREATE TABLE tabela_noua (id INT AUTO_INCREMENT PRIMARY KEY, Senzor1 INT, Senzor2 INT, Senzor3 INT)\";\n\n// Setați instrucțiunea SQL ca valoare pentru câmpul \"topic\"\nmsg.topic = query;\n\n// Returnați mesajul modificat pentru a fi trimis la nodul MySQL pentru a crea tabela nouă\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 280,
+        "wires": [
+            [
+                "45acc456e14ad44d"
+            ]
+        ]
+    },
+    {
+        "id": "b368dadb6f9401bc",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Creare tabela1",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "1a5b883787c14cc7",
+                "e5700ee2043bd00d"
+            ]
+        ]
+    },
+    {
+        "id": "fc18fabc5c14b303",
+        "type": "mysql",
+        "z": "c3644a3b57e2390f",
+        "mydb": "c2c8ed4c67d49107",
+        "name": "database2",
+        "x": 670,
+        "y": 640,
+        "wires": [
+            [
+                "2722afd26d72900b"
+            ]
+        ]
+    },
+    {
+        "id": "2722afd26d72900b",
+        "type": "debug",
+        "z": "c3644a3b57e2390f",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "topic",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "45acc456e14ad44d",
+        "type": "mysql",
+        "z": "c3644a3b57e2390f",
+        "mydb": "c2c8ed4c67d49107",
+        "name": "database2",
+        "x": 530,
+        "y": 280,
+        "wires": [
+            [
+                "17d1c2d19a9573ae",
+                "74eb4c5245a40189"
+            ]
+        ]
+    },
+    {
+        "id": "17d1c2d19a9573ae",
+        "type": "debug",
+        "z": "c3644a3b57e2390f",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "37b6f474b5e27895",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Afisare",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "SELECT * FROM database.tabela_noua;",
+        "payload": "",
+        "payloadType": "date",
+        "x": 310,
+        "y": 320,
+        "wires": [
+            [
+                "45acc456e14ad44d"
+            ]
+        ]
+    },
+    {
+        "id": "e5700ee2043bd00d",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 8",
+        "func": "var query=\"INSERT INTO tabela_noua (id) VALUES (1);\"\nmsg.topic=query;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 240,
+        "wires": [
+            [
+                "45acc456e14ad44d"
+            ]
+        ]
+    },
+    {
+        "id": "8c79467c957ed6be",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 9",
+        "func": "var query = \"SHOW CREATE TABLE tabela_noua\";\n\n// Setăm instrucțiunea SQL ca valoare pentru topic, deoarece nodul MySQL din Node-RED folosește topic-ul pentru a trimite instrucțiunile SQL\nmsg.topic = query;\n\n// Returnăm mesajul modificat pentru a fi trimis la nodul MySQL pentru a executa interogarea\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 640,
+        "wires": [
+            [
+                "bf4d2297de6a789d"
+            ]
+        ]
+    },
+    {
+        "id": "8fe4152eb12acfe0",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Copiere",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 640,
+        "wires": [
+            [
+                "8c79467c957ed6be"
+            ]
+        ]
+    },
+    {
+        "id": "bf4d2297de6a789d",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 10",
+        "func": "var query = \"INSERT INTO tabela_noua (Senzor1, Senzor2, Senzor3) SELECT Senzor1, Senzor2, Senzor3 FROM tabela\";\nmsg.topic = query;\n\n//SELECT LAST_INSERT_ID();\n// Setăm instrucțiunea SQL ca valoare pentru topic\n//var query = \"SELECT * FROM tabela WHERE Id >= \" + ultimulIdCopiat;\n\n//var ultimulIdCopiat = msg.payload[0].last_insert_id;\n\n// Salvați ultimul ID copiat într-o variabilă globală sau într-un alt loc de stocare\n//global.set(\"ultimul_id_nou\", ultimulIdCopiat);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 640,
+        "wires": [
+            [
+                "fc18fabc5c14b303"
+            ]
+        ]
+    },
+    {
+        "id": "34f311852387bf4a",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Delete",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DELETE FROM tabela WHERE id<74",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "c59f9a54916ab759"
+            ]
+        ]
+    },
+    {
+        "id": "3f0bb30b85c460d6",
+        "type": "ui_table",
+        "z": "c3644a3b57e2390f",
+        "group": "73ed019159690db1",
+        "name": "Tabela1",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 680,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "74eb4c5245a40189",
+        "type": "ui_table",
+        "z": "c3644a3b57e2390f",
+        "group": "73ed019159690db1",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 710,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "bf61323999fc29aa",
+        "type": "inject",
+        "z": "c3644a3b57e2390f",
+        "name": "Copiere",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 380,
+        "wires": [
+            [
+                "e3265f1a298fe479"
+            ]
+        ]
+    },
+    {
+        "id": "e3265f1a298fe479",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 21",
+        "func": "var a=\"SELECT MAX(id) FROM tabela_noua;\";\nmsg.topic=a;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 380,
+        "wires": [
+            [
+                "db593d5502023b2f"
+            ]
+        ]
+    },
+    {
+        "id": "db593d5502023b2f",
+        "type": "mysql",
+        "z": "c3644a3b57e2390f",
+        "mydb": "c2c8ed4c67d49107",
+        "name": "database2",
+        "x": 430,
+        "y": 380,
+        "wires": [
+            [
+                "ece729c590019086"
+            ]
+        ]
+    },
+    {
+        "id": "e357b27960a0efb5",
+        "type": "debug",
+        "z": "c3644a3b57e2390f",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "5ca8d5af4b6e8383",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 22",
+        "func": "/*var a=msg.topic;\nvar b=msg.topic;\nvar c=msg.topic;\nvar d=\"INSERT INTO tabela_noua (Senzor1, Senzor2, Senzor3) VALUE a,b,c\";\nmsg.topic=d;\nreturn msg;*/\n\n/*var a=\"INSERT INTO [tabela_noua] (Senzor1, Senzor2, Senzor3) VALUES ('{{{payload.object.Senzor1}}}', '{{{payload.object.Senzor2}}}', '{{{payload.object.Senzor3}}}')\";\nmsg.topic=a;\nreturn a;*/\n\nvar payload = msg.payload;\n\n// Create an empty string to store SQL queries\nvar queries = '';\n\n// Iterate over each object in the array\nfor (var i = 0; i < payload.length; i++) {\n    var obj = payload[i];\n    \n    // Construct the SQL query for each object and append it to the string\n    var query = \"INSERT INTO tabela_noua (Senzor1, Senzor2, Senzor3) VALUES ('\" + obj.Senzor1 + \"', '\" + obj.Senzor2 + \"', '\" + obj.Senzor3 + \"');\";\n    queries += query;\n}\n\n// Set the string of queries as the topic\nmsg.topic = queries;\n\n// Return the modified message\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 460,
+        "wires": [
+            [
+                "f9182cc652c0d376"
+            ]
+        ]
+    },
+    {
+        "id": "5fedded73902c0c0",
+        "type": "mysql",
+        "z": "c3644a3b57e2390f",
+        "mydb": "c2c8ed4c67d49107",
+        "name": "database",
+        "x": 140,
+        "y": 460,
+        "wires": [
+            [
+                "5ca8d5af4b6e8383"
+            ]
+        ]
+    },
+    {
+        "id": "ece729c590019086",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 23",
+        "func": "msg = {payload: msg.payload[0][\"MAX(id)\"]};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "bbe398acb8ac4846"
+            ]
+        ]
+    },
+    {
+        "id": "bbe398acb8ac4846",
+        "type": "function",
+        "z": "c3644a3b57e2390f",
+        "name": "function 24",
+        "func": "msg.topic=\"SELECT * FROM tabela WHERE id > \"+ msg.payload.toString()+\";\"\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 380,
+        "wires": [
+            [
+                "5fedded73902c0c0",
+                "57dba50182e98f12"
+            ]
+        ]
+    },
+    {
+        "id": "f9182cc652c0d376",
+        "type": "mysql",
+        "z": "c3644a3b57e2390f",
+        "mydb": "c2c8ed4c67d49107",
+        "name": "database2",
+        "x": 490,
+        "y": 460,
+        "wires": [
+            [
+                "e357b27960a0efb5"
+            ]
+        ]
+    },
+    {
+        "id": "57dba50182e98f12",
+        "type": "debug",
+        "z": "c3644a3b57e2390f",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "c2c8ed4c67d49107",
+        "type": "MySQLdatabase",
+        "name": "database",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "database",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "73ed019159690db1",
+        "type": "ui_group",
+        "name": "Tabela2",
+        "tab": "e354ca9592f98c7f",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e354ca9592f98c7f",
+        "type": "ui_tab",
+        "name": "Home2",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
